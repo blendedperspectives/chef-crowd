@@ -28,12 +28,4 @@ if node['crowd']['install_type'] == 'standalone'
     group node['crowd']['user']
     notifies :restart, 'service[crowd]', :delayed
   end
-
-  template '/var/run/crowd.pid' do
-    source 'crowd.pid.erb'
-    mode '0644'
-    owner node['crowd']['user']
-    group node['crowd']['user']
-    not_if { File.exist?('/var/run/crowd.pid') }
-  end
 end

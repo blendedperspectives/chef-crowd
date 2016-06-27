@@ -30,6 +30,9 @@ APP=CROWD
 USER=<%= node['crowd']['user'] %>
 BASE=<%= node['crowd']['install_path'] %>/crowd
 
+CATALINA_HOME=$BASE/apache-tomcat
+CATALINA_PID=$CATALINA_HOME/work/catalina.pid
+
 function start {
     echo "Starting $APP"
     su -l $USER -c $BASE/start_crowd.sh
@@ -59,9 +62,9 @@ case "$1" in
     status)
         <% case node['platform_family'] -%>
         <% when 'rhel' -%>
-        status -p /var/run/crowd.pid $APP
+        status -p $CATALINA_PID $APP
         <% else -%>
-        status_of_proc -p /var/run/crowd.pid $JAVA_HOME/bin/java $APP
+        status_of_proc -p $CATALINA_PID $JAVA_HOME/bin/java $APP
         <% end -%>
         RETVAL=$?
         ;;
